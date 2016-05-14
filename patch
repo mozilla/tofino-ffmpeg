@@ -1,0 +1,31 @@
+diff --git b/ffmpeg.gyp a/ffmpeg.gyp
+index 5c21675..000b388 100644
+--- b/ffmpeg.gyp
++++ a/ffmpeg.gyp
+@@ -90,7 +90,7 @@
+     'shared_generated_dir': '<(SHARED_INTERMEDIATE_DIR)/third_party/ffmpeg',
+ 
+     # Stub generator script and signatures of all functions used by Chrome.
+-    'generate_stubs_script': '../../tools/generate_stubs/generate_stubs.py',
++    'generate_stubs_script': '../tools/generate_stubs.py',
+     'sig_files': ['chromium/ffmpeg.sigs'],
+   },
+   'conditions': [
+@@ -101,7 +101,7 @@
+           'type': 'static_library',
+           'includes': [
+             'ffmpeg_generated.gypi',
+-            '../yasm/yasm_compile.gypi',
++            '../tools/yasm_compile.gypi',
+           ],
+           'sources': [
+             '<@(asm_sources)',
+@@ -453,7 +453,7 @@
+                       ],
+                       'action': ['python',
+                                  '<(generate_stubs_script)',
+-                                 '-i', '<(INTERMEDIATE_DIR)',
++                                 '-i', '<(INTERMEDIATE_DIR)defs',
+                                  '-o', '<(shared_generated_dir)',
+                                  '-t', 'windows_def',
+                                  '-m', 'ffmpeg.dll',
