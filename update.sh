@@ -1,6 +1,13 @@
 #! /bin/sh
 
-REVISION=`cat FFMPEG_REVISION`
+lcc=`cat LCC_REVISION`
+
+cv=`curl -fsSL https://raw.githubusercontent.com/electron/libchromiumcontent/${lcc}/VERSION`
+
+REVISION=`curl -fsSL https://chromium.googlesource.com/chromium/src/+/${cv}/DEPS \
+  | grep "ffmpeg.git" | sed -e s/.*ffmpeg\\.git@// -e s/\&#39\;.*//`
+
+echo ${REVISION} >FFMPEG_REVISION
 
 rm -rf ffmpeg
 mkdir ffmpeg

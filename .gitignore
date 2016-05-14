@@ -11,9 +11,12 @@ ffmpeg/ffmpeg.Makefile
 ffmpeg/gyp-mac-tool
 
 # Build outputs
+ffmpeg/ia32
 ffmpeg/x32
 ffmpeg/x64
 ffmpeg/out
+dist
+yasm
 
 # FFMpeg's build system
 ffmpeg/configure
