@@ -5,22 +5,24 @@
     'chromeos': 0,
     'msan': 0,
     'clang': 0,
-    'use_system_yasm': 1,
 
     'conditions': [
       ['OS=="win"', {
         'os_posix': 0,
         'win_use_allocator_shim': 0,
+        'use_system_yasm': 0,
       }, {
         'os_posix': 1,
+        'use_system_yasm': 1,
       }],
     ]
   },
   'target_defaults': {
     'default_configuration': '<(target_arch)',
     'msvs_cygwin_shell': 0,
+
     'configurations': {
-      'x86_Base': {
+      'ia32_Base': {
         'abstract': 1,
         'msvs_settings': {
           'VCLinkerTool': {
@@ -32,7 +34,7 @@
             'TargetMachine': '1',
           },
         },
-        'msvs_configuration_platform': 'x86',
+        'msvs_configuration_platform': 'Win32',
       },
       'x64_Base': {
         'abstract': 1,
@@ -79,12 +81,18 @@
           },
         }
       },
-      'x86': {
-        'inherit_from': ['x86_Base', 'Release_Base']
-      },
-      'x64': {
-        'inherit_from': ['x64_Base', 'Release_Base']
-      }
+
+      'conditions': [
+        ['target_arch=="ia32"', {
+          'ia32': {
+            'inherit_from': ['ia32_Base', 'Release_Base']
+          }
+        }, {
+          'x64': {
+            'inherit_from': ['x64_Base', 'Release_Base']
+          }
+        }],
+      ]
     }
   }
 }

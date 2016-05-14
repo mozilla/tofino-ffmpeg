@@ -1,0 +1,37 @@
+language: cpp
+os:
+  - osx
+  - linux
+sudo: required
+dist: trusty
+
+branches:
+  only:
+    - master
+
+env:
+  - ARCH=x64
+
+install:
+  - source scripts/bootstrap.sh
+
+script:
+  - cd ffmpeg
+  - ../gyp/gyp -f make -I ../config.gypi -D target_arch=${target_arch} -G output_dir=. --depth=. ffmpeg.gyp
+  - make
+  - cd ..
+
+after_success:
+  - scripts/package.sh
+
+addons:
+  artifacts:
+    aws_access_key:
+        secure: P1OKuzK3gV6Upux/A9DvRnhZHjyy51ruVdsOEUUC+epFPc3k2piWg2rYcDskp4qSiSqCND92mhWf0DUIAfUhPaf6qgJAAGpswbhMURH5ygvwZINZndGfNKwTGZYi5r1XkSKhNsKyARsos8kHe4bJJi1wHyEsjpVOEMrxsgm7yGMjwEj6UIqCQKbhvjq1QQMFUFTpezsb/6Vb+LMOwwuT2rOIyyi4GpkPktcbKPSqsqzZakTe00+dbzECfyT+OwNddCJ0Uoaw5E1y0m8HOfvkDSKilEWzPGvC1tsZJLipEeImrZbarQI0BPscEwv9nJS+nZGiiAATwIDJzFKn+npfl/qbqtilLJYiHrq6DaNYv54+FIBe5ankmHUcwj9bfgUxjNIoRQHw6LrjK4VWeXgxA8ooBjY2TVphsksM993PQZGfo5f5jXCBqlyE0rTIm5K/2yXaHbvXKy24NQxmZCRRtj7R7OHTiRAew2+nUekFtafd6pz0Yr8V/z9b1yzk+XYjzpaGfTtuLeNIQcHmwGwGfE6Wb9QLK9Z647pZyFmLNbkGUDJCOfH7mwvZY+tLSiNcC99uTtyewoNwOm/dt0FgOqJXaKxqswLYV8Bz6Xbf+GQPkiPlRHxfmRr+CGK69YvyJWgE55gf/21H+isqnsdbnplHaU8xBiBlBQhobyyfx6A= 
+    aws_secret_key:
+        secure: HZNdGXVB+fkL9d4LqpPEkS0xTSXxKbBdK6AHZW5t5zKmPDSuq1bJBfOmPHl+icUevyTEVfI4eVk/7WtRCcsR3ZyqHfWLt/XDqMT/WEARSWJm1yS71TKGd5VIN0ndI6H7wu0ykHzRLXvgZXOoQu0bsBEjIEdQp+3d/DkCZyE8V/MTSjh6VMiWJCY23MXBl4L4LR8EAiEHoLS/jAQSqYQEvPgHy3ZAQf6APYLhmnqmidAILrrC2oWr9802qxSwc8PtCPNaUQ8fnuW74ZtD8CMd9uhmHNCb7s3KbCnE3SlY2+mI3dwSJ2alBYBBELrYcqn45ik/Fkd6nOBRCjPKrgrlpgvWdB1M7DOpmv36sKEG76/+dzT6mkr9M2Wzgg/jrj/tHdrQHC4nWWqH1WudhgExRuQUwUW41JrN3LeErnFtyFIbJEGLpZpP8cgIXxgH4gYmhRWRuFLnZuaTwsojo8WtNJoXp0dHDfq7ksts9M+Gyni30o9N8tB1nubeGgUtL2IuRZYQrULHdux5JRkXRwIcMtz+wJ9azVSU4Vdv+0CDy5tyaYOfht/xeRjmNKbcQIiaDM0jgB2vFlPwNgfgszGoG3BUNz8saRr0nqkCfHRD3UAYuBVI06lbI4FkrR/Luo5JtGmfc2YOIrAJQ/PMyTr3Bo10GgWmTczAGJ0hoZ4cEBY=
+    s3_bucket:
+        secure: qvhNGnARk08dc+wONyQj80UmHY+3xot+Nvyu/T1O45/wyg0PAu6n0IGOKEb2gXcSOQ4q1r/8sGBpY+FGz02p9XFsrwX1yhRk8ciH+jZ+YdvgUz2daHs+MIqih7lUz7yesLdhejCVJVEVSUy2nPeTBDisocBupklkwLRcRQ9/sJmXIZkuA2NPJGsh5MYgmVYY6Tsx9z2ZYg14uapfaEo/2Iciwu+1CDRZaErRQeU19WSnDZbva3dRlasnX4XtJm5DBbJmhTVgakX6hYeqHPCUSyTETaD9SQkD5rCCl+EvyDjqynNdAJzOZKILELbnkS9XK69bzXZjYCmKzLSJPNcnMcpX/PH/c4/Ug2CI1zhpfw3iq1IZMSz4IHyWbQXR8kSEvtfxKN2aHdT7yPDyJyTYLWqE82VJpf0oqBf/DUOH8TSdrNOmJrnuUrFLjEGhrFoEijlrp1pAmUTa3fPZx7Cvet99tv9LSZ9P4IZEfOJoLH9RWRKpYNQUCG/EJgm0sS240b+9j+Dc9xnA3lvgIB5ZtSI41myHepQ2aNE5V8Kb/9guMhnCvdWk/4SNwtm4rkydtVRA3lW0/zHYn8Ot/k/YxFS8RTNXsPpct6+l+03ahHfoyucAP87L3pkuVPOhwFiL33dZP/37qcY0jvEb/+iofDA5teilzEPFmkHENj4r0Bo=
+    paths: $(ls ffmpeg-*.zip | tr "\n" ":")
+    target_paths: mozilla/tofino-ffmpeg/builds/$(cat LCC_REVISION)
+    permissions: private

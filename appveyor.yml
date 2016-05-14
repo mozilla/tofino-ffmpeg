@@ -1,0 +1,39 @@
+image: Visual Studio 2013
+
+environment:
+  matrix:
+    - architecture: x86
+    - architecture: x64
+
+branches:
+  only:
+    - master
+
+pull_requests:
+  do_not_increment_build_number: true
+
+install:
+  - scripts\bootstrap.bat
+  - cd ffmpeg
+  - ..\gyp\gyp -I ..\config.gypi -G msvs_version=2013 -D target_arch=%target_arch% --depth=. ffmpeg.gyp
+  - cd ..
+
+build:
+  project: ffmpeg\ffmpeg.sln
+
+after_build:
+  - scripts\package.bat
+
+artifacts:
+  - path: ffmpeg-*.zip
+
+deploy:
+  provider: S3
+  access_key_id:
+    secure: xsHB6zN4IRGJy9uUocU3+6/nZPa408ARYut11Wg30CA=
+  secret_access_key:
+    secure: 8L4sC5l97dY13Jnv/6Gd8Fe//FpnOuMQWu7st2LNLRhX4LjQ9uSLfObqRT0HsBqw
+  bucket:
+    secure: a/ijSslVXIxT1KRgwK6oWBJiOYD2DS5KCC5JpEDtXaU=
+  set_public: false
+  folder: mozilla/tofino-ffmpeg/builds/$(REVISION)
