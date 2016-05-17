@@ -9,4 +9,4 @@ else
 fi
 
 cd dist
-zip -r9 ../ffmpeg-${platform}-${target_arch}.zip
+zip -r9 ../ffmpeg-${platform}-${target_arch}.zip *
