@@ -13,7 +13,7 @@ pull_requests:
   do_not_increment_build_number: true
 
 install:
-  - scripts/bootstrap.bat
+  - scripts\bootstrap.bat
   - cd ffmpeg
   - ..\gyp\gyp -I ..\config.gypi -G msvs_version=2013 -D target_arch=%target_arch% --depth=. ffmpeg.gyp
   - cd ..
@@ -21,9 +21,11 @@ install:
 build:
   project: ffmpeg\ffmpeg.sln
 
+after_build:
+  - scripts\package.bat
+
 artifacts:
-  - path: dist
-    name: library
+  - path: ffmpeg-*.zip
 
 deploy:
   provider: S3
@@ -34,4 +36,4 @@ deploy:
   bucket:
     secure: a/ijSslVXIxT1KRgwK6oWBJiOYD2DS5KCC5JpEDtXaU=
   set_public: false
-  folder: mozilla/tofino-ffmpeg/builds
+  folder: mozilla/tofino-ffmpeg/builds/$(REVISION)
